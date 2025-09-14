@@ -1,17 +1,143 @@
 [
   {
+    "id": "case_lab_01",
     "title": "Mistério no Laboratório",
+    "scenarioImage": "assets/scenarios/laboratorio.png",
+    "scenarioText": "Um frasco foi encontrado quebrado no laboratório e alguém mexeu nos reagentes.",
     "baseSuspects": [
-      {"name": "Prof. Química"},
-      {"name": "Zelador Carlos"},
-      {"name": "Sofia"}
+      {
+        "name": "Prof. Química"
+      },
+      {
+        "name": "Assistente de Laboratório"
+      },
+      {
+        "name": "Zelador Carlos"
+      },
+      {
+        "name": "Sofia"
+      }
     ],
     "clueSets": [
-      {"clues": ["Frasco quebrado", "Pegadas de sapato"]}
+      {
+        "clues": [
+          "Pegadas perto da pia",
+          "Luvas descartadas",
+          "Rótulo trocado"
+        ]
+      }
     ],
     "dialogues": [
-      {"suspect": "Prof. Química", "text": "Eu estava preparando uma aula, não vi nada."},
-      {"suspect": "Zelador Carlos", "text": "Eu ouvi um barulho, mas pensei que fosse normal."}
+      {
+        "suspect": "Prof. Química",
+        "text": "Eu estava preparando a aula de hoje, não quebrei nada."
+      },
+      {
+        "suspect": "Assistente de Laboratório",
+        "text": "Vi alguém sair correndo, mas não reconheci."
+      },
+      {
+        "suspect": "Zelador Carlos",
+        "text": "Eu só estava limpando o corredor, não entrei no laboratório."
+      },
+      {
+        "suspect": "Sofia",
+        "text": "Eu busquei meu caderno aqui, mas estava vazio quando cheguei."
+      }
+    ]
+  },
+  {
+    "id": "case_quadra_01",
+    "title": "Sumiço do Troféu na Quadra",
+    "scenarioImage": "assets/scenarios/quadra.png",
+    "scenarioText": "O troféu do campeonato desapareceu durante o treino!",
+    "baseSuspects": [
+      {
+        "name": "Treinador Marcos"
+      },
+      {
+        "name": "Rival Esportivo"
+      },
+      {
+        "name": "Atleta Campeão"
+      },
+      {
+        "name": "Bia"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Marcas de tênis recentes",
+          "Porta lateral aberta",
+          "Toalha com iniciais"
+        ]
+      }
+    ],
+    "dialogues": [
+      {
+        "suspect": "Treinador Marcos",
+        "text": "Eu estava organizando os cones, não vi nada suspeito."
+      },
+      {
+        "suspect": "Rival Esportivo",
+        "text": "Eu só vim assistir, não preciso de troféu emprestado."
+      },
+      {
+        "suspect": "Atleta Campeão",
+        "text": "Saí mais cedo para descansar antes da prova."
+      },
+      {
+        "suspect": "Bia",
+        "text": "Vi alguém perto da sala de troféus, mas estava de boné."
+      }
+    ]
+  },
+  {
+    "id": "case_biblio_01",
+    "title": "O Mistério da Biblioteca",
+    "scenarioImage": "assets/scenarios/biblioteca.png",
+    "scenarioText": "Vários livros foram reorganizados formando uma mensagem secreta.",
+    "baseSuspects": [
+      {
+        "name": "Prof. Ciências"
+      },
+      {
+        "name": "Programador Gui"
+      },
+      {
+        "name": "Historiador Local"
+      },
+      {
+        "name": "Diretor Fernando"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Sequência numérica na lombada",
+          "Marcador de página com código",
+          "Computador ligado com linhas de código"
+        ]
+      }
+    ],
+    "dialogues": [
+      {
+        "suspect": "Prof. Ciências",
+        "text": "Eu uso a biblioteca para orientar estudos, não para bagunça."
+      },
+      {
+        "suspect": "Programador Gui",
+        "text": "Códigos? Talvez alguém esteja treinando lógica."
+      },
+      {
+        "suspect": "Historiador Local",
+        "text": "Antigas mensagens cifradas eram comuns em cartas."
+      },
+      {
+        "suspect": "Diretor Fernando",
+        "text": "Quero tudo esclarecido ainda hoje."
+      }
     ]
   }
 ]
