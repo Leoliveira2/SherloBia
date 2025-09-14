@@ -1,65 +1,18 @@
 [
   {
-    "id": "case_lab_01",
-    "title": "Mistério no Laboratório",
-    "scenarioImage": "assets/scenarios/laboratorio.png",
-    "scenarioText": "Um frasco foi encontrado quebrado no laboratório e alguém mexeu nos reagentes.",
+    "id": "case_hall_trofeus",
+    "title": "Sumiço do Troféu no Hall",
+    "scenarioImage": "assets/scenarios/hall_trofeus.png",
+    "scenarioText": "O troféu principal da escola desapareceu do expositor no hall de entrada.",
     "baseSuspects": [
       {
-        "name": "Prof. Química"
-      },
-      {
-        "name": "Assistente de Laboratório"
+        "name": "Treinador Marcos"
       },
       {
         "name": "Zelador Carlos"
       },
       {
         "name": "Sofia"
-      }
-    ],
-    "clueSets": [
-      {
-        "clues": [
-          "Pegadas perto da pia",
-          "Luvas descartadas",
-          "Rótulo trocado"
-        ]
-      }
-    ],
-    "dialogues": [
-      {
-        "suspect": "Prof. Química",
-        "text": "Eu estava preparando a aula de hoje, não quebrei nada."
-      },
-      {
-        "suspect": "Assistente de Laboratório",
-        "text": "Vi alguém sair correndo, mas não reconheci."
-      },
-      {
-        "suspect": "Zelador Carlos",
-        "text": "Eu só estava limpando o corredor, não entrei no laboratório."
-      },
-      {
-        "suspect": "Sofia",
-        "text": "Eu busquei meu caderno aqui, mas estava vazio quando cheguei."
-      }
-    ]
-  },
-  {
-    "id": "case_quadra_01",
-    "title": "Sumiço do Troféu na Quadra",
-    "scenarioImage": "assets/scenarios/quadra.png",
-    "scenarioText": "O troféu do campeonato desapareceu durante o treino!",
-    "baseSuspects": [
-      {
-        "name": "Treinador Marcos"
-      },
-      {
-        "name": "Rival Esportivo"
-      },
-      {
-        "name": "Atleta Campeão"
       },
       {
         "name": "Bia"
@@ -68,36 +21,46 @@
     "clueSets": [
       {
         "clues": [
-          "Marcas de tênis recentes",
-          "Porta lateral aberta",
-          "Toalha com iniciais"
+          "Marcas de dedos no vidro",
+          "Porta do expositor semiaberta",
+          "Pegadas indo em direção ao corredor"
         ]
+      }
+    ],
+    "clueImages": [
+      {
+        "src": "assets/clues/quadro_original.png",
+        "caption": "Quadro na parede do corredor (antes)"
+      },
+      {
+        "src": "assets/clues/quadro_virado.png",
+        "caption": "Quadro levemente deslocado (depois)"
       }
     ],
     "dialogues": [
       {
         "suspect": "Treinador Marcos",
-        "text": "Eu estava organizando os cones, não vi nada suspeito."
+        "text": "Estava reunindo o time para o treino. Nem me aproximei do expositor."
       },
       {
-        "suspect": "Rival Esportivo",
-        "text": "Eu só vim assistir, não preciso de troféu emprestado."
+        "suspect": "Zelador Carlos",
+        "text": "Eu só limpei o chão mais cedo, tudo estava no lugar."
       },
       {
-        "suspect": "Atleta Campeão",
-        "text": "Saí mais cedo para descansar antes da prova."
+        "suspect": "Sofia",
+        "text": "Vi alguém usando boné passando rápido pelo corredor!"
       },
       {
         "suspect": "Bia",
-        "text": "Vi alguém perto da sala de troféus, mas estava de boné."
+        "text": "A fechadura pareceu arranhada, como se alguém tentasse abrir sem a chave."
       }
     ]
   },
   {
-    "id": "case_biblio_01",
-    "title": "O Mistério da Biblioteca",
+    "id": "case_biblioteca",
+    "title": "A Chave Perdida da Biblioteca",
     "scenarioImage": "assets/scenarios/biblioteca.png",
-    "scenarioText": "Vários livros foram reorganizados formando uma mensagem secreta.",
+    "scenarioText": "A chave da sala de arquivos sumiu e pistas levam à biblioteca.",
     "baseSuspects": [
       {
         "name": "Prof. Ciências"
@@ -106,37 +69,235 @@
         "name": "Programador Gui"
       },
       {
-        "name": "Historiador Local"
+        "name": "Sofia"
       },
       {
-        "name": "Diretor Fernando"
+        "name": "Bia"
       }
     ],
     "clueSets": [
       {
         "clues": [
-          "Sequência numérica na lombada",
-          "Marcador de página com código",
-          "Computador ligado com linhas de código"
+          "Livro fora da ordem",
+          "Poeira perturbada na prateleira",
+          "Bilhete com sequência numérica"
         ]
+      }
+    ],
+    "clueImages": [
+      {
+        "src": "assets/clues/chave_livro.png",
+        "caption": "Chave sobre pilha de livros"
       }
     ],
     "dialogues": [
       {
         "suspect": "Prof. Ciências",
-        "text": "Eu uso a biblioteca para orientar estudos, não para bagunça."
+        "text": "Eu orientei um estudo em grupo aqui. Ninguém mexeu em chaves."
       },
       {
         "suspect": "Programador Gui",
-        "text": "Códigos? Talvez alguém esteja treinando lógica."
+        "text": "Sequências numéricas? Parece mais um enigma que uma bagunça."
       },
       {
-        "suspect": "Historiador Local",
-        "text": "Antigas mensagens cifradas eram comuns em cartas."
+        "suspect": "Sofia",
+        "text": "Ouvi um barulho de metal caindo perto daquela mesa."
       },
       {
-        "suspect": "Diretor Fernando",
-        "text": "Quero tudo esclarecido ainda hoje."
+        "suspect": "Bia",
+        "text": "Alguns livros formam padrões como se fossem coordenadas."
+      }
+    ]
+  },
+  {
+    "id": "case_lab_info",
+    "title": "Código Fantasma no Lab de Informática",
+    "scenarioImage": "assets/scenarios/lab_informatica.png",
+    "scenarioText": "Os computadores exibiram linhas de código misteriosas durante a aula.",
+    "baseSuspects": [
+      {
+        "name": "Programador Gui"
+      },
+      {
+        "name": "Prof. Ciências"
+      },
+      {
+        "name": "Sofia"
+      },
+      {
+        "name": "Bia"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Pendrive esquecido",
+          "Tarefa agendada no sistema",
+          "Mensagem escondida no código"
+        ]
+      }
+    ],
+    "clueImages": [],
+    "dialogues": [
+      {
+        "suspect": "Programador Gui",
+        "text": "Eu configurei os PCs, mas não programei nada para aparecer sozinho."
+      },
+      {
+        "suspect": "Prof. Ciências",
+        "text": "Talvez algum aluno tenha automatizado um script por engano."
+      },
+      {
+        "suspect": "Sofia",
+        "text": "Vi um pendrive vermelho perto do projetor."
+      },
+      {
+        "suspect": "Bia",
+        "text": "O código tinha as iniciais 'GM'. Estranho."
+      }
+    ]
+  },
+  {
+    "id": "case_refeitorio",
+    "title": "Mistério do Refeitório Bagunçado",
+    "scenarioImage": "assets/scenarios/refeitorio.png",
+    "scenarioText": "Mesas repletas de embalagens e um tomate rolando indicam que alguém apressou a limpeza.",
+    "baseSuspects": [
+      {
+        "name": "Zelador Carlos"
+      },
+      {
+        "name": "Sofia"
+      },
+      {
+        "name": "Bia"
+      },
+      {
+        "name": "Prof. Ciências"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Lixo fora do horário",
+          "Trilho da bandeja molhado",
+          "Guardanapo com bilhete"
+        ]
+      }
+    ],
+    "clueImages": [],
+    "dialogues": [
+      {
+        "suspect": "Zelador Carlos",
+        "text": "O refeitório já deveria estar limpo. Quem deixou isso?!"
+      },
+      {
+        "suspect": "Sofia",
+        "text": "Viram um grupo saindo correndo pela porta lateral."
+      },
+      {
+        "suspect": "Bia",
+        "text": "Há gotas de suco formando uma trilha até o corredor."
+      },
+      {
+        "suspect": "Prof. Ciências",
+        "text": "Eu estava na sala dos professores, não passei por aqui."
+      }
+    ]
+  },
+  {
+    "id": "case_jardim",
+    "title": "O Segredo Enterrado no Jardim",
+    "scenarioImage": "assets/scenarios/jardim.png",
+    "scenarioText": "Uma caixa de madeira parcialmente enterrada foi encontrada próximo ao canteiro.",
+    "baseSuspects": [
+      {
+        "name": "Zelador Carlos"
+      },
+      {
+        "name": "Treinador Marcos"
+      },
+      {
+        "name": "Sofia"
+      },
+      {
+        "name": "Bia"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Pá com terra fresca",
+          "Pegadas em direção ao portão",
+          "Rastro de folhas cortadas"
+        ]
+      }
+    ],
+    "clueImages": [],
+    "dialogues": [
+      {
+        "suspect": "Zelador Carlos",
+        "text": "Eu cuidei do jardim cedo, mas não enterrei nada aí."
+      },
+      {
+        "suspect": "Treinador Marcos",
+        "text": "Passei com a turma para aquecimento, não mexemos em nada."
+      },
+      {
+        "suspect": "Sofia",
+        "text": "Ouvi um barulho de madeira raspando o chão."
+      },
+      {
+        "suspect": "Bia",
+        "text": "Há um cadeado pequeno na caixa. Precisamos da chave certa."
+      }
+    ]
+  },
+  {
+    "id": "case_sala_musica",
+    "title": "Partituras Trocadas na Sala de Música",
+    "scenarioImage": "assets/scenarios/sala_musica.png",
+    "scenarioText": "As partituras dos instrumentos foram trocadas antes da apresentação.",
+    "baseSuspects": [
+      {
+        "name": "Sofia"
+      },
+      {
+        "name": "Bia"
+      },
+      {
+        "name": "Programador Gui"
+      },
+      {
+        "name": "Zelador Carlos"
+      }
+    ],
+    "clueSets": [
+      {
+        "clues": [
+          "Post-it com nota musical",
+          "Estante com marca de dedo",
+          "Metronomo ligado sozinho"
+        ]
+      }
+    ],
+    "clueImages": [],
+    "dialogues": [
+      {
+        "suspect": "Sofia",
+        "text": "Eu só vim afinar o violino. As partituras já estavam trocadas."
+      },
+      {
+        "suspect": "Bia",
+        "text": "A luz do metrônomo piscava. Talvez tenha temporizador."
+      },
+      {
+        "suspect": "Programador Gui",
+        "text": "Se alguém fez brincadeira, deve ter deixado uma pista digital."
+      },
+      {
+        "suspect": "Zelador Carlos",
+        "text": "Eu fecho a sala toda noite. Nada de estranho ontem."
       }
     ]
   }

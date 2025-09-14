@@ -1,30 +1,7 @@
-Treinador Marcos
-Diretor Fernando
-Pedro
-Prof. Biologia
-Rival Esportivo
-Zelador Carlos
-Monitora Ana
-Leo
-Faxineiro Rui
-Cientista Mirim
-Prof. Química
-Jardineiro João
-Assistente de Laboratório
-Historiador Local
-Aluna Rita
-Sofia
-Zeladora Maria
-Diretora Helena
-Cozinheira Ana
-Gêmeas Gabi e Gigi
-Programador Gui
-Prof. Carla
-Estudante Gourmet
-Ex-Aluno Nostálgico
-Prof. Arthur
-Prof. Ciências
-Aluno Traquinas
-Clara
-Atleta Campeão
 Bia
+Sofia
+Prof. Química
+Prof. Ciências
+Programador Gui
+Treinador Marcos
+Zelador Carlos
