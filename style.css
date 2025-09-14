@@ -1,0 +1,21 @@
+:root {
+  --bg-color: #1c1c2b;
+  --accent-color: #3a86ff;
+  --highlight-color: #ffbe0b;
+  --text-color: #fff;
+  --error-color: #ff595e;
+  --success-color: #06d6a0;
+}
+body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #12121c; }
+.logo { font-size: 1.5rem; font-weight: 800; }
+.nav .btn { margin-left: 0.5rem; }
+.btn { padding: 0.5rem 1rem; border: none; background: var(--accent-color); color: #fff; font-weight: 700; border-radius: 8px; cursor: pointer; }
+.btn.ghost { background: transparent; border: 1px solid var(--accent-color); }
+.container { padding: 1rem; }
+.skill-tree-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem; }
+.difference-hotspot { position: absolute; border: 2px solid transparent; cursor: pointer; }
+.difference-hotspot.found { border: 2px solid green; }
+.difference-hotspot.wrong { border: 2px solid red; }
+#toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 1000; }
+.toast { background: var(--accent-color); color: #fff; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }

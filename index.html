@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sherlock Bia — v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+</head>
+<body>
+<header>
+  <h1 class="logo">🕵️‍♀️ Sherlock Bia — v2.0</h1>
+  <div class="nav">
+    <button class="btn" data-action="go-welcome">Início</button>
+    <button class="btn" data-action="go-hub">Mapa de Casos</button>
+    <button class="btn" data-action="go-parents">Painel dos Pais</button>
+    <button class="btn" data-action="go-skill-tree">🌟 Habilidades</button>
+    <button class="btn ghost" data-action="reset-progress">Zerar Progresso</button>
+  </div>
+</header>
+<main class="container" id="app"></main>
+<div id="toast-container" aria-live="polite"></div>
+<div id="custom-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h3 id="modal-title"></h3>
+    <p id="modal-message"></p>
+    <input type="text" id="modal-input" class="modal-input" style="display: none;">
+    <div id="modal-options" class="modal-actions"></div>
+  </div>
+</div>
+<footer>Sherlock Bia: Desvende mistérios e torne-se um detetive mirim!</footer>
+<script src="script.js"></script>
+</body>
+</html>

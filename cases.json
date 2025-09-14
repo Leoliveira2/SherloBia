@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Mistério no Laboratório",
+    "baseSuspects": [
+      {"name": "Prof. Química"},
+      {"name": "Zelador Carlos"},
+      {"name": "Sofia"}
+    ],
+    "clueSets": [
+      {"clues": ["Frasco quebrado", "Pegadas de sapato"]}
+    ],
+    "dialogues": [
+      {"suspect": "Prof. Química", "text": "Eu estava preparando uma aula, não vi nada."},
+      {"suspect": "Zelador Carlos", "text": "Eu ouvi um barulho, mas pensei que fosse normal."}
+    ]
+  }
+]
