@@ -44,7 +44,7 @@ const App = {
 }
 };
 
-// Helpers
+// Notificações simples
 function toast(msg) {
   const el = document.createElement('div');
   el.className = 'toast'; el.textContent = msg;
@@ -64,7 +64,7 @@ const UI = {
     document.getElementById('app').innerHTML = `
       <div class="card">
         <h2>Bem-vindo(a) ao Sherlock Bia!</h2>
-        <p class="small">Escolha <b>Mapa de Casos</b> para começar uma investigação.</p>
+        <p class="small">Vá em <b>Mapa de Casos</b> para escolher um cenário e iniciar sua investigação.</p>
       </div>`;
   },
   renderHub() {
@@ -72,7 +72,7 @@ const UI = {
       <div class="card">
         <h3>{}c.title</h3>
         <div class="grid grid-3">
-          <img src="${c.scenarioImage}" alt="cenário" class="case-img">
+          <img src="${c.scenarioImage}" alt="Cenário: ${c.title}" class="case-img">
           <div>
             <p>${c.scenarioText}</p>
             <button class="btn" data-open-case="${i}">Investigar</button>
@@ -81,7 +81,7 @@ const UI = {
       </div>`).join('');
     document.getElementById('app').innerHTML = list || '<div class="card">Sem casos carregados.</div>';
     document.querySelectorAll('[data-open-case]').forEach(btn=>{
-      btn.addEventListener('click', e=> UI.renderCase(parseInt(btn.getAttribute('data-open-case'))));
+      btn.addEventListener('click', ()=> UI.renderCase(parseInt(btn.getAttribute('data-open-case'))));
     });
   },
   renderCase(idx) {
@@ -130,12 +130,11 @@ const UI = {
   }
 };
 
-// Load cases and init
+// Carregar casos e iniciar
 async function boot() {
   try {
     const resp = await fetch('cases.json');
-    const data = await resp.json();
-    App.state.cases = data;
+    App.state.cases = await resp.json();
   } catch(e) {
     console.error(e);
     toast('Falha ao carregar casos.');
@@ -144,7 +143,6 @@ async function boot() {
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  // Buttons
   document.querySelectorAll('button[data-action]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const a = btn.getAttribute('data-action');
