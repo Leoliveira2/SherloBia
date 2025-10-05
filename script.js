@@ -72,6 +72,7 @@ const UI = {
       if (b.id==='btnAccuse'){ Main.accuse(); }
       if (action==='tap-hotspot'){ Main.collectClue(b.dataset.caseId, b.dataset.clueId); }
       if (action==='tap-clue'){ Main.showClueDetail(b.dataset.caseId, b.dataset.clueId); }
+      if (action==='talk-suspect'){ Main.talkSuspect(b.dataset.caseId, b.dataset.suspectId); }
     });
     window.addEventListener('beforeunload', save);
   },
@@ -109,8 +110,11 @@ const UI = {
       const talked = (sess.suspectsTalked||[]).includes(s.id);
       return `<div class="suspect">
         <strong>${s.name}</strong>
-        <small>${s.desc}</small>
-        <div><em>${talked?'Já conversou':'Ainda não conversou'}</em></div>
+        <small>${s.desc||''}</small>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+          <em>${talked?'Já conversou':'Ainda não conversou'}</em>
+          <button class="btn" data-action="talk-suspect" data-case-id="${caseId}" data-suspect-id="${s.id}" ${talked?'disabled':''}>Conversar</button>
+        </div>
       </div>`;
     }).join('');
   }
@@ -155,6 +159,23 @@ const Data = {
 
 // --------------- Main ---------------
 const Main = {
+  talkSuspect(caseId, suspectId){
+    const c = CASES.find(x=>x.id===caseId); const sess = S.sessions[caseId]; if(!c||!sess) return;
+    const s = (c.suspects||[]).find(x=>x.id===suspectId); if(!s) return;
+    const talked = (sess.suspectsTalked||[]).includes(suspectId);
+    const dialog = talked
+      ? `<p>${s.name}: Já conversamos, lembra? Dê uma olhada nas pistas que você juntou.</p>`
+      : `<p>${s.name}: Oi! Eu estava por aqui, mas não vi tudo. Você já conferiu as pistas do cenário?</p>`;
+    showModal({ title:`Conversa com ${s.name}`, body: dialog });
+    if (!talked){
+      sess.suspectsTalked = (sess.suspectsTalked||[]);
+      sess.suspectsTalked.push(suspectId);
+      save();
+      UI.renderSide(caseId);
+      toast('Entrevista registrada');
+    }
+  },
+
   startCase(id){ UI.renderCase(id); },
   exitCase(){ $('#gameArea').classList.add('hidden'); $('#caseIntro').classList.remove('hidden'); currentCaseId=null; this.stopTimer(); UI.renderHud(); },
   startTimer(caseId){
