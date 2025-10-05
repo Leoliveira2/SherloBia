@@ -99,3 +99,10 @@ main { max-width: 1200px; margin: 16px auto; padding: 0 12px; }
   position: fixed; right: 16px; bottom: 16px; background: #111827; border: 1px solid #1f2937; color: var(--text);
   padding: 10px 12px; border-radius: 12px; z-index: 60; box-shadow: 0 8px 30px #0008;
 }
+
+
+/* v1.7.3 polish */
+.scene { transition: opacity .35s ease; }
+.scene.is-changing { opacity: .2; }
+.hotspot:focus-visible { box-shadow: 0 0 0 3px #fde047; border-color: #fde047; }
+.hotspot:hover { background: #0b122055; transform: translateY(-1px); }

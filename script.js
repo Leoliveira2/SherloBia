@@ -89,7 +89,7 @@ const UI = {
     const scene = $('#scene'); const hsWrap = $('#hotspots');
     scene.style.backgroundImage = `url('assets/${sceneDef.bg}')`;
     hsWrap.innerHTML='';
-    (sceneDef.hotspots||[]).forEach(h=>{
+    (sceneDef.hotspots||[]).filter(h=>{ const sess=S.sessions[caseId]; if(h.requiresTalk){ return (sess.suspectsTalked||[]).includes(h.requiresTalk); } return true; }).forEach(h=>{
       const btn = document.createElement('button');
       btn.className='hotspot'; btn.dataset.action='tap-hotspot'; btn.dataset.caseId=caseId; btn.dataset.clueId=h.clueId;
       btn.style.left = h.x+'%'; btn.style.top=h.y+'%'; btn.style.width=h.w+'%'; btn.style.height=h.h+'%';
@@ -103,7 +103,7 @@ const UI = {
       const found = sess.clues.includes(k.id);
       return `<div class="clue">
         <div><strong>${k.text}</strong> ${found?'<span class="status-ok">[coletada]</span>':'<span class="status-pending">[pendente]</span>'}</div>
-        <div><button class="btn ghost" data-action="tap-clue" data-case-id="${caseId}" data-clue-id="${k.id}">${found?'Ver':'Detalhes'}</button></div>
+        <div><button class="btn ghost" data-action="tap-clue" data-case-id="${caseId}" data-clue-id="${k.id}" ${found?\'\':\'disabled\'}>${found?'Ver':'Ainda não encontrada'}</button></div>
       </div>`;
     }).join('');
     $('#suspectsList').innerHTML = (c.suspects||[]).map(s=>{
@@ -173,6 +173,9 @@ const Main = {
       save();
       UI.renderSide(caseId);
       toast('Entrevista registrada');
+      // Re-render current scene to reveal any gated hotspots
+      const c=CASES.find(x=>x.id===caseId);
+      if(c){ UI.renderScene(caseId, c.scenes[0]); UI.renderSide(caseId); }
     }
   },
 
@@ -230,7 +233,7 @@ const Main = {
         {label:'Cancelar', variant:'ghost'},
         {label:'Confirmar', onClick:(close)=>{
           const sel = document.querySelector('input[name="culprit"]:checked');
-          if(!sel){ toast('Escolha um suspeito.'); return; }
+          if(!sel){ showModal({title:'Atenção', body:'Escolha um suspeito antes de confirmar.'}); return; }
           const ok = sel.value === c.solve.culprit;
           if(ok){
             sess.status='solved'; this.stopTimer(); S.stars+=3; S.coins+=3; save(); UI.renderHud(); close();
