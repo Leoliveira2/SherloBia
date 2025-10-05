@@ -70,7 +70,7 @@ const UI = {
       if (b.id==='btnInventory'){ Main.openInventory(); }
       if (b.id==='btnHint'){ Main.giveHint(); }
       if (b.id==='btnAccuse'){ Main.accuse(); }
-      if (action==='tap-hotspot'){ Main.collectClue(b.dataset.caseId, b.dataset.clueId); }
+      if (action==='tap-hotspot'){ const reqItem=b.dataset.requiresItem; if(reqItem){ const sess=S.sessions[b.dataset.caseId]; if(!(sess.items||[]).includes(reqItem)){ const c=CASES.find(x=>x.id===b.dataset.caseId); const ic=(c.clues||[]).find(x=>x.id===reqItem)?.text||'um item'; showModal({title:'Item necessário', body:`Você precisa de <strong>${ic}</strong> para interagir aqui.`}); return; } } Main.collectClue(b.dataset.caseId, b.dataset.clueId); }
       if (action==='tap-clue'){ Main.showClueDetail(b.dataset.caseId, b.dataset.clueId); }
       if (action==='talk-suspect'){ Main.talkSuspect(b.dataset.caseId, b.dataset.suspectId); }
     });
@@ -87,13 +87,15 @@ const UI = {
   },
   renderScene(caseId, sceneDef){
     const scene = $('#scene'); const hsWrap = $('#hotspots');
-    scene.style.backgroundImage = `url('assets/${sceneDef.bg}')`;
+    scene.classList.add('is-changing'); setTimeout(()=>{ scene.style.backgroundImage = `url('assets/${sceneDef.bg}')`; scene.classList.remove('is-changing'); }, 50);
     hsWrap.innerHTML='';
-    (sceneDef.hotspots||[]).filter(h=>{ const sess=S.sessions[caseId]; if(h.requiresTalk){ return (sess.suspectsTalked||[]).includes(h.requiresTalk); } return true; }).forEach(h=>{
+    (sceneDef.hotspots||[]).filter(h=>{ const sess=S.sessions[caseId]; if(h.requiresTalk && !(sess.suspectsTalked||[]).includes(h.requiresTalk)) return false; if(h.requiresItem && !(sess.items||[]).includes(h.requiresItem)) return false; return true; }).forEach(h=>{
       const btn = document.createElement('button');
       btn.className='hotspot'; btn.dataset.action='tap-hotspot'; btn.dataset.caseId=caseId; btn.dataset.clueId=h.clueId;
       btn.style.left = h.x+'%'; btn.style.top=h.y+'%'; btn.style.width=h.w+'%'; btn.style.height=h.h+'%';
-      btn.innerHTML = `<span class="icon">${h.icon||'🔎'}</span>`;
+      btn.dataset.requiresItem = h.requiresItem||'';
+      btn.dataset.requiresTalk = h.requiresTalk||'';
+      btn.innerHTML = `<span class=\"icon\">${h.icon||'🔎'}</span>`;
       hsWrap.appendChild(btn);
     });
   },
@@ -159,14 +161,35 @@ const Data = {
 
 // --------------- Main ---------------
 const Main = {
+  
   talkSuspect(caseId, suspectId){
     const c = CASES.find(x=>x.id===caseId); const sess = S.sessions[caseId]; if(!c||!sess) return;
     const s = (c.suspects||[]).find(x=>x.id===suspectId); if(!s) return;
     const talked = (sess.suspectsTalked||[]).includes(suspectId);
-    const dialog = talked
+
+    let content = talked
       ? `<p>${s.name}: Já conversamos, lembra? Dê uma olhada nas pistas que você juntou.</p>`
-      : `<p>${s.name}: Oi! Eu estava por aqui, mas não vi tudo. Você já conferiu as pistas do cenário?</p>`;
-    showModal({ title:`Conversa com ${s.name}`, body: dialog });
+      : `<p>${s.name}: Oi! Eu estava por aqui. O que você quer saber?</p>
+         <div style="display:grid;gap:8px;margin-top:8px">
+           <button class="btn" data-action="dlg-opt" data-case-id="${caseId}" data-suspect-id="${s.id}" data-opt="onde">Onde você estava?</button>
+           <button class="btn" data-action="dlg-opt" data-case-id="${caseId}" data-suspect-id="${s.id}" data-opt="algo">Viu algo estranho?</button>
+         </div>`;
+
+    const modal = showModal({ title:`Conversa com ${s.name}`, body: content });
+
+    // Mark as talked
+    if (!talked){
+      sess.suspectsTalked = (sess.suspectsTalked||[]);
+      sess.suspectsTalked.push(suspectId);
+      save();
+      UI.renderSide(caseId);
+      // Reveal any gated hotspots by re-rendering current scene (use first scene for simplicidade)
+      const sc = c.scenes[0];
+      UI.renderScene(caseId, sc);
+      toast('Entrevista registrada');
+    }
+  },
+0);
     if (!talked){
       sess.suspectsTalked = (sess.suspectsTalked||[]);
       sess.suspectsTalked.push(suspectId);
@@ -192,7 +215,7 @@ const Main = {
   stopTimer(){ if(currentTimerIntervalId){ clearInterval(currentTimerIntervalId); currentTimerIntervalId=null; } },
   collectClue(caseId, clueId){
     const sess=S.sessions[caseId]; const c=CASES.find(x=>x.id===caseId); if(!sess||!c) return;
-    if (!sess.clues.includes(clueId)){ sess.clues.push(clueId); S.stars+=1; S.coins+=1; save(); UI.renderSide(caseId); UI.renderHud(); toast('Pista coletada! +1⭐ +1🪙'); }
+    if (!sess.clues.includes(clueId)){ sess.clues.push(clueId); const clue=(CASES.find(x=>x.id===caseId)?.clues||[]).find(c=>c.id===clueId); if(clue?.isItem){ sess.items = sess.items||[]; if(!sess.items.includes(clueId)) sess.items.push(clueId); } S.stars+=1; S.coins+=1; save(); UI.renderSide(caseId); UI.renderHud(); toast('Pista coletada! +1⭐ +1🪙'); }
     else { toast('Você já coletou essa pista.'); }
   },
   showClueDetail(caseId, clueId){
@@ -200,7 +223,14 @@ const Main = {
     const img = clue.asset ? `<img src="assets/${clue.asset}" alt="" style="width:100%;border-radius:10px;margin:8px 0;" onerror="this.style.display='none'"/>` : '';
     showModal({title: clue.text, body:`<p>${clue.detail||''}</p>${img}`});
   },
-  openInventory(){ const body = `<p><strong>Estrelas:</strong> ${S.stars}</p><p><strong>Moedas:</strong> ${S.coins}</p><p style="color:#94a3b8">Dicas online requerem chave de API; caso contrário, usamos dicas offline.</p>`; showModal({title:'Inventário', body}); },
+  openInventory(){ const caseData = CASES.find(x=>x.id===currentCaseId);
+    const sess=S.sessions[currentCaseId]||{};
+    const items = (caseData?.clues||[]).filter(c=>c.isItem && (sess.clues||[]).includes(c.id));
+    const grid = items.map(c=>`<div class='inventory-item'><img src='assets/${c.itemIcon||c.asset||""}' onerror="this.style.display='none'"/><div>${c.text}</div></div>`).join('');
+    const itemsHtml = `<h4>Itens</h4><div class='inventory-grid'>${grid || '<div style=\'opacity:.7\'>Nenhum item.</div>'}</div>`;
+    const body = `<p><strong>Estrelas:</strong> ${S.stars}</p><p><strong>Moedas:</strong> ${S.coins}</p>` + itemsHtml + `<p style='color:#94a3b8'>Alguns locais exigem itens (ex.: chaves). Itens aparecem aqui após coletados.</p>`;
+    showModal({title:'Inventário', body}); },
+  
   async giveHint(){
     if(!currentCaseId){ toast('Abra um caso para pedir uma dica.'); return; }
     const sess=S.sessions[currentCaseId]; const c=CASES.find(x=>x.id===currentCaseId);
@@ -208,12 +238,35 @@ const Main = {
     let hintText='';
     if (useOnline){ try{ hintText = await LLM.generateHint(c, sess); }catch(e){ console.warn('LLM falhou', e);} }
     if(!hintText){
-      const pending=(c.clues||[]).find(cl=>!sess.clues.includes(cl.id));
-      hintText = pending ? `Dica offline: você ainda não coletou "${pending.text}". Explore os cenários e observe áreas destacadas.`
-                         : 'Você já coletou as pistas principais. Revise os suspeitos e faça a acusação.';
+      // 1) If there is a hotspot gated by conversation, suggest who to talk to
+      const allHotspots = (c.scenes||[]).flatMap(s=>s.hotspots||[]);
+      const gatedTalk = allHotspots.find(h=> h.requiresTalk && !(sess.suspectsTalked||[]).includes(h.requiresTalk));
+      if (gatedTalk){
+        const who = (c.suspects||[]).find(su=>su.id===gatedTalk.requiresTalk)?.name || 'um colega';
+        hintText = `Converse com ${who} e volte à cena correspondente.`;
+      } else {
+        // 2) If there is a hotspot gated by item, suggest the item
+        const gatedItem = allHotspots.find(h=> h.requiresItem && !((sess.items||[]).includes(h.requiresItem)));
+        if (gatedItem){
+          const need = (c.clues||[]).find(cl=>cl.id===gatedItem.requiresItem)?.text || 'um item especial';
+          hintText = `Encontre ${need} e use onde houver um cadeado.`;
+        } else {
+          // 3) Otherwise, suggest the next uncollected clue with its scene
+          const pending = (c.clues||[]).find(cl=> !(sess.clues||[]).includes(cl.id));
+          if (pending){
+            // try to find the scene containing its hotspot
+            const scene = (c.scenes||[]).find(s=>(s.hotspots||[]).some(h=>h.clueId===pending.id));
+            const sceneName = scene ? scene.id : 'alguma cena';
+            hintText = `Você ainda não coletou "${pending.text}". Explore a cena: ${sceneName}.`;
+          } else {
+            hintText = 'Você já coletou as pistas principais. Revise os suspeitos e faça a acusação.';
+          }
+        }
+      }
     }
     showModal({title:'Dica', body:`<p>${hintText}</p>`});
   },
+
   accuse(){
     if(!currentCaseId) return; const c=CASES.find(x=>x.id===currentCaseId); const sess=S.sessions[currentCaseId];
     const body = document.createElement('div');

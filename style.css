@@ -106,3 +106,16 @@ main { max-width: 1200px; margin: 16px auto; padding: 0 12px; }
 .scene.is-changing { opacity: .2; }
 .hotspot:focus-visible { box-shadow: 0 0 0 3px #fde047; border-color: #fde047; }
 .hotspot:hover { background: #0b122055; transform: translateY(-1px); }
+
+
+/* v1.8 UI */
+.scene { transition: opacity .35s ease; }
+.scene.is-changing { opacity: .25; }
+.hotspot:focus-visible { box-shadow: 0 0 0 3px #fde047; border-color: #fde047; }
+.hotspot:hover { background: #0b122055; transform: translateY(-1px); }
+.suspect.talked { border-color: #14532d; background: #052e16; }
+.suspect .badge-talked { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; background:#16a34a33; color:#86efac; margin-left:6px; }
+.suspect .badge-pending { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; background:#f59e0b33; color:#fde68a; margin-left:6px; }
+.inventory-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap:8px; margin-top:8px; }
+.inventory-item { background:#0f172a; border:1px solid #1f2b44; border-radius:10px; padding:8px; text-align:center; }
+.inventory-item img { width:64px; height:64px; object-fit:contain; display:block; margin:0 auto 6px; }
