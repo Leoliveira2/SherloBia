@@ -1,25 +1,243 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sherlock Bia — v2.4 (HQ)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sherlock Bia — Detetive Mirim (v1.7 Fused)</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-<header>
-  <h1 class="logo">🕵️‍♀️ Sherlock Bia — v2.4</h1>
-  <nav class="nav">
-    <button class="btn" data-action="go-welcome">Início</button>
-    <button class="btn" data-action="go-hub">Mapa de Casos</button>
-    <button class="btn" data-action="go-parents">Painel dos Pais</button>
-    <button class="btn" data-action="go-skill-tree">🌟 Habilidades</button>
-    <button class="btn ghost" data-action="reset-progress">Zerar Progresso</button>
-  </nav>
-</header>
-<main class="container" id="app"></main>
-<footer>Somente imagens e ícones de alta qualidade fornecidos por você.</footer>
-<script src="script.js"></script>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">🕵️‍♀️</span>
+      <h1>Sherlock Bia</h1>
+      <span class="tag">Detetive Mirim</span>
+    </div>
+    <div class="hud">
+      <div class="hud-item"><span>⏱️</span> <span id="timer">00:00</span></div>
+      <div class="hud-item"><span>⭐</span> <span id="stars">0</span></div>
+      <div class="hud-item"><span>🪙</span> <span id="coins">0</span></div>
+      <button id="btnInventory" class="btn ghost" title="Inventário">🎒 Inventário</button>
+      <button id="btnHint" class="btn" title="Pedir dica">💡 Dica</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="caseIntro" class="panel">
+      <h2>Bem-vindo(a)!</h2>
+      <p>Escolha um caso para investigar. Encontre pistas no cenário, interrogue suspeitos e faça a acusação final.</p>
+      <div class="case-list" id="caseList"></div>
+    </section>
+
+    <section id="gameArea" class="panel hidden">
+      <div class="scene-wrap">
+        <div id="scene" class="scene" role="img" aria-label="Cenário do caso"></div>
+        <div id="hotspots" class="hotspots"></div>
+      </div>
+      <aside class="side">
+        <div class="card">
+          <h3>Pistas</h3>
+          <div id="cluesList" class="clues"></div>
+        </div>
+        <div class="card">
+          <h3>Suspeitos</h3>
+          <div id="suspectsList" class="suspects"></div>
+        </div>
+        <div class="card">
+          <h3>Ações</h3>
+          <button id="btnAccuse" class="btn warn">Fazer Acusação</button>
+          <button id="btnBack" class="btn ghost">Voltar</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>v1.7 • Engine v1.6.1 + Conteúdo SherloBia</span>
+  </footer>
+
+  <div id="modalRoot"></div>
+  <script id="cases-json" type="application/json">
+[
+  {
+    "id": "c-001",
+    "title": "O Quadro Misterioso",
+    "thumb": "school_hallway_cartoon.png",
+    "summary": "O quadro do corredor apareceu de ponta-cabeça. Quem virou e por quê?",
+    "scenes": [
+      {
+        "id": "hall",
+        "bg": "school_hallway_cartoon.png",
+        "hotspots": [
+          {
+            "id": "hs-quadro",
+            "x": 62,
+            "y": 18,
+            "w": 18,
+            "h": 28,
+            "icon": "🖼️",
+            "clueId": "cl-quadro"
+          },
+          {
+            "id": "hs-pegadas",
+            "x": 24,
+            "y": 75,
+            "w": 18,
+            "h": 12,
+            "icon": "👣",
+            "clueId": "cl-pegadas"
+          }
+        ]
+      },
+      {
+        "id": "library",
+        "bg": "library_cartoon.png",
+        "hotspots": [
+          {
+            "id": "hs-livro",
+            "x": 40,
+            "y": 52,
+            "w": 20,
+            "h": 18,
+            "icon": "📕",
+            "clueId": "cl-livro"
+          }
+        ]
+      }
+    ],
+    "clues": [
+      {
+        "id": "cl-quadro",
+        "text": "Quadro virado",
+        "detail": "O quadro está de ponta-cabeça.",
+        "asset": "quadro_virado.png"
+      },
+      {
+        "id": "cl-pegadas",
+        "text": "Pegadas de tinta",
+        "detail": "Pegadas pequenas seguem em direção à biblioteca."
+      },
+      {
+        "id": "cl-livro",
+        "text": "Chave no livro",
+        "detail": "Um livro com uma pequena chave escondida entre as páginas.",
+        "asset": "chave_livro.png"
+      },
+      {
+        "id": "cl-anotacao",
+        "text": "Anotação no caderno",
+        "detail": "Um bilhete sobre uma 'surpresa' no recreio."
+      }
+    ],
+    "suspects": [
+      {
+        "id": "s1",
+        "name": "Traquinas",
+        "desc": "Gosta de artes e brincadeiras.",
+        "icon": "aluno_traquinas.png"
+      },
+      {
+        "id": "s2",
+        "name": "Rita",
+        "desc": "Organizada, vive na biblioteca.",
+        "icon": "aluna_rita.png"
+      },
+      {
+        "id": "s3",
+        "name": "Diretora Helena",
+        "desc": "Não tolera bagunça.",
+        "icon": "diretora_helena.png"
+      }
+    ],
+    "solve": {
+      "culprit": "s1",
+      "reasonText": "As pegadas levaram à biblioteca. A chave no livro de artes indica o plano do Traquinas: virar o quadro para anunciar a exposição."
+    }
+  },
+  {
+    "id": "c-002",
+    "title": "O Mistério do Jardim",
+    "thumb": "garden_cartoon.png",
+    "summary": "Alguém recolocou placas do jardim em posições trocadas. Por quê?",
+    "scenes": [
+      {
+        "id": "garden",
+        "bg": "garden_cartoon.png",
+        "hotspots": [
+          {
+            "id": "hs-placa",
+            "x": 55,
+            "y": 36,
+            "w": 16,
+            "h": 14,
+            "icon": "🪧",
+            "clueId": "cl-placa"
+          },
+          {
+            "id": "hs-pasos",
+            "x": 20,
+            "y": 72,
+            "w": 20,
+            "h": 12,
+            "icon": "👣",
+            "clueId": "cl-passo"
+          }
+        ]
+      },
+      {
+        "id": "kitchen",
+        "bg": "kitchen_cartoon.png",
+        "hotspots": [
+          {
+            "id": "hs-terra",
+            "x": 46,
+            "y": 70,
+            "w": 16,
+            "h": 16,
+            "icon": "🪴",
+            "clueId": "cl-terra"
+          }
+        ]
+      }
+    ],
+    "clues": [
+      {
+        "id": "cl-placa",
+        "text": "Placa fora do lugar",
+        "detail": "Uma placa está na área errada do jardim."
+      },
+      {
+        "id": "cl-passo",
+        "text": "Pegadas com terra úmida",
+        "detail": "Alguém caminhou do jardim para dentro da escola."
+      },
+      {
+        "id": "cl-terra",
+        "text": "Terra na cozinha",
+        "detail": "Há terra fresca perto da pia, como se alguém tivesse lavado ferramentas."
+      }
+    ],
+    "suspects": [
+      {
+        "id": "s1",
+        "name": "Jardineiro João",
+        "desc": "Cuida do jardim.",
+        "icon": "jardineiro_joao.png"
+      },
+      {
+        "id": "s2",
+        "name": "Cozinheira Ana",
+        "desc": "Sempre organizada com a limpeza.",
+        "icon": "cozinheira_ana.png"
+      }
+    ],
+    "solve": {
+      "culprit": "s1",
+      "reasonText": "João trocou placas para proteger uma área recém-plantada dos passos, e lavou as ferramentas na cozinha por estar em reforma externa."
+    }
+  }
+]
+</script>
+  <script src="./script.js"></script>
 </body>
 </html>
