@@ -4,7 +4,6 @@
     "title": "O Quadro Misterioso",
     "summary": "Pegadas de tinta surgiram no corredor. Quem mexeu no quadro?",
     "thumb": "school_hallway_cartoon.png",
-
     "scenes": [
       {
         "id": "hall",
@@ -24,47 +23,18 @@
         ]
       }
     ],
-
     "clues": [
-      {
-        "id": "cl-pegadas",
-        "text": "Pegadas de tinta",
-        "detail": "Marcas frescas levam da parede ao corredor."
-      },
-      {
-        "id": "cl-quadro",
-        "text": "Quadro virado",
-        "detail": "O quadro esta torto, como se alguem tivesse mexido.",
-        "asset": "quadro_virado.png"
-      },
-      {
-        "id": "cl-livro",
-        "text": "Chave no livro",
-        "detail": "Uma chave estava escondida em um livro oco.",
-        "isItem": true
-      },
-      {
-        "id": "cl-anotacao",
-        "text": "Anotacao no caderno",
-        "detail": "Surpresa no recreio, olhe a biblioteca!"
-      },
-      {
-        "id": "cl-armario",
-        "text": "Armario aberto",
-        "detail": "A chave abriu o armario e revelou um mapa com setas para a biblioteca.",
-        "asset": "quadro_original.png"
-      }
+      { "id": "cl-pegadas", "text": "Pegadas de tinta", "detail": "Marcas frescas levam da parede ao corredor." },
+      { "id": "cl-quadro", "text": "Quadro virado", "detail": "O quadro esta torto, como se alguem tivesse mexido.", "asset": "quadro_virado.png" },
+      { "id": "cl-livro", "text": "Chave no livro", "detail": "Uma chave estava escondida em um livro oco.", "isItem": true },
+      { "id": "cl-anotacao", "text": "Anotacao no caderno", "detail": "Surpresa no recreio, olhe a biblioteca!" },
+      { "id": "cl-armario", "text": "Armario aberto", "detail": "A chave abriu o armario e revelou um mapa com setas para a biblioteca.", "asset": "quadro_original.png" }
     ],
-
     "suspects": [
       { "id": "s1", "name": "Traquinas", "desc": "Sempre aprontando", "icon": "" },
       { "id": "s2", "name": "Rita", "desc": "Estava perto da biblioteca", "icon": "" }
     ],
-
-    "solve": {
-      "culprit": "s1",
-      "reasonText": "As pistas ligam o Traquinas ao quadro e ao caminho de tinta."
-    }
+    "solve": { "culprit": "s1", "reasonText": "As pistas ligam o Traquinas ao quadro e ao caminho de tinta." }
   },
 
   {
@@ -72,7 +42,6 @@
     "title": "O Misterio do Jardim",
     "summary": "O canteiro foi remexido e ha terra na cozinha. Quem foi?",
     "thumb": "garden_cartoon.png",
-
     "scenes": [
       {
         "id": "garden",
@@ -90,34 +59,16 @@
         ]
       }
     ],
-
     "clues": [
-      {
-        "id": "cl-marcas",
-        "text": "Marcas no canteiro",
-        "detail": "Alguem remexeu as plantas recentemente."
-      },
-      {
-        "id": "cl-caminho",
-        "text": "Caminho de folhas",
-        "detail": "Um trilho de folhas leva em direcao a cozinha."
-      },
-      {
-        "id": "cl-terra",
-        "text": "Terra na cozinha",
-        "detail": "Restos de terra perto da pia indicam entrada recente pela porta dos fundos."
-      }
+      { "id": "cl-marcas", "text": "Marcas no canteiro", "detail": "Alguem remexeu as plantas recentemente." },
+      { "id": "cl-caminho", "text": "Caminho de folhas", "detail": "Um trilho de folhas leva em direcao a cozinha." },
+      { "id": "cl-terra", "text": "Terra na cozinha", "detail": "Restos de terra perto da pia indicam entrada recente pela porta dos fundos." }
     ],
-
     "suspects": [
       { "id": "s1", "name": "Jardineiro Joao", "desc": "Trabalhava nos canteiros", "icon": "" },
       { "id": "s2", "name": "Cozinheira Ana", "desc": "Estava na cozinha pela manha", "icon": "" }
     ],
-
-    "solve": {
-      "culprit": "s1",
-      "reasonText": "As pistas apontam que o jardineiro entrou pela cozinha apos mexer no jardim."
-    }
+    "solve": { "culprit": "s1", "reasonText": "As pistas apontam que o jardineiro entrou pela cozinha apos mexer no jardim." }
   },
 
   {
@@ -125,7 +76,6 @@
     "title": "O Enigma da Sala de Musica",
     "summary": "A partitura sumiu e alguem usou o computador do lab.",
     "thumb": "music_room_cartoon.png",
-
     "scenes": [
       {
         "id": "music_room",
@@ -143,34 +93,185 @@
         ]
       }
     ],
-
     "clues": [
-      {
-        "id": "cl-partitura",
-        "text": "Partitura incompleta",
-        "detail": "Faltam paginas; parece que foram escaneadas."
-      },
-      {
-        "id": "cl-pendrive",
-        "text": "Pendrive na estante",
-        "detail": "Um pendrive esquecido pode ter os arquivos.",
-        "isItem": true
-      },
-      {
-        "id": "cl-arquivo",
-        "text": "Arquivo no computador",
-        "detail": "O pendrive revela um PDF com a partitura completa."
-      }
+      { "id": "cl-partitura", "text": "Partitura incompleta", "detail": "Faltam paginas; parece que foram escaneadas." },
+      { "id": "cl-pendrive", "text": "Pendrive na estante", "detail": "Um pendrive esquecido pode ter os arquivos.", "isItem": true },
+      { "id": "cl-arquivo", "text": "Arquivo no computador", "detail": "O pendrive revela um PDF com a partitura completa." }
     ],
-
     "suspects": [
       { "id": "s1", "name": "Maestro Marcos", "desc": "Ensaiava com a turma", "icon": "" },
       { "id": "s2", "name": "Tecnica Carla", "desc": "Cuida do lab de informatica", "icon": "" }
     ],
+    "solve": { "culprit": "s2", "reasonText": "A tecnica usou o lab para digitalizar e guardar a partitura no pendrive." }
+  },
 
-    "solve": {
-      "culprit": "s2",
-      "reasonText": "A tecnica usou o lab para digitalizar e guardar a partitura no pendrive."
-    }
+  {
+    "id": "c-004",
+    "title": "O Relogio da Escola",
+    "summary": "O relogio parou minutos antes do sinal. Quem mexeu?",
+    "thumb": "school_hallway_cartoon.png",
+    "scenes": [
+      {
+        "id": "hall",
+        "bg": "school_hallway_cartoon.png",
+        "hotspots": [
+          { "id": "hs-relogio", "x": 68, "y": 18, "w": 12, "h": 14, "icon": "🕰️", "clueId": "cl-relogio" },
+          { "id": "hs-cabo", "x": 20, "y": 52, "w": 14, "h": 12, "icon": "🔌", "clueId": "cl-cabo", "requiresTalk": "s1" }
+        ]
+      },
+      {
+        "id": "lab",
+        "bg": "computer_lab_cartoon.png",
+        "hotspots": [
+          { "id": "hs-log", "x": 48, "y": 46, "w": 16, "h": 16, "icon": "💻", "clueId": "cl-log" }
+        ]
+      }
+    ],
+    "clues": [
+      { "id": "cl-relogio", "text": "Relogio parado", "detail": "Os ponteiros travaram antes do sinal." },
+      { "id": "cl-cabo", "text": "Cabo solto", "detail": "Um cabo do relogio central estava desconectado." },
+      { "id": "cl-log", "text": "Log do sistema", "detail": "O horario foi ajustado no computador do lab." }
+    ],
+    "suspects": [
+      { "id": "s1", "name": "Zelador Paulo", "desc": "Cuida das manutencoes", "icon": "" },
+      { "id": "s2", "name": "Aluna Rita", "desc": "Chegou atrasada hoje", "icon": "" }
+    ],
+    "solve": { "culprit": "s1", "reasonText": "O cabo solto e o ajuste no lab indicam manutencao do zelador no horario errado." }
+  },
+
+  {
+    "id": "c-005",
+    "title": "O Misterio do Bolo",
+    "summary": "O bolo da diretora foi trocado por um de areia!",
+    "thumb": "kitchen_cartoon.png",
+    "scenes": [
+      {
+        "id": "kitchen",
+        "bg": "kitchen_cartoon.png",
+        "hotspots": [
+          { "id": "hs-forma", "x": 62, "y": 62, "w": 14, "h": 14, "icon": "🧁", "clueId": "cl-forma" },
+          { "id": "hs-parede", "x": 32, "y": 40, "w": 12, "h": 12, "icon": "🧽", "clueId": "cl-farelo", "requiresTalk": "s1" }
+        ]
+      },
+      {
+        "id": "canteen",
+        "bg": "canteen_cartoon.png",
+        "hotspots": [
+          { "id": "hs-balde", "x": 54, "y": 58, "w": 16, "h": 16, "icon": "🪣", "clueId": "cl-areia" }
+        ]
+      }
+    ],
+    "clues": [
+      { "id": "cl-forma", "text": "Forma limpa demais", "detail": "A forma foi lavada ha pouco tempo." },
+      { "id": "cl-farelo", "text": "Migalhas no chao", "detail": "Migalhas levam ate a saida para o refeitorio." },
+      { "id": "cl-areia", "text": "Balde de areia", "detail": "Alguem pegou areia do patio perto do refeitorio." }
+    ],
+    "suspects": [
+      { "id": "s1", "name": "Cozinheira Ana", "desc": "Lavou a cozinha", "icon": "" },
+      { "id": "s2", "name": "Aluno Traquinas", "desc": "Passou pelo refeitorio rindo", "icon": "" }
+    ],
+    "solve": { "culprit": "s2", "reasonText": "Migalhas, balde de areia e risadas no refeitorio apontam para o Traquinas." }
+  },
+
+  {
+    "id": "c-006",
+    "title": "O Trofeu Desaparecido",
+    "summary": "O trofeu da olimpiada sumiu da vitrine.",
+    "thumb": "school_hallway_cartoon.png",
+    "scenes": [
+      {
+        "id": "hall",
+        "bg": "school_hallway_cartoon.png",
+        "hotspots": [
+          { "id": "hs-vitrine", "x": 26, "y": 34, "w": 18, "h": 20, "icon": "🏆", "clueId": "cl-vitrine" },
+          { "id": "hs-pegadas", "x": 56, "y": 64, "w": 14, "h": 12, "icon": "👟", "clueId": "cl-rastro" }
+        ]
+      },
+      {
+        "id": "library",
+        "bg": "library_cartoon.png",
+        "hotspots": [
+          { "id": "hs-mochila", "x": 70, "y": 54, "w": 14, "h": 14, "icon": "🎒", "clueId": "cl-mochila", "requiresTalk": "s2" }
+        ]
+      }
+    ],
+    "clues": [
+      { "id": "cl-vitrine", "text": "Vitrine aberta", "detail": "A fechadura nao foi forcada." },
+      { "id": "cl-rastro", "text": "Rastro de tenis", "detail": "Pegadas recentes seguem para a biblioteca." },
+      { "id": "cl-mochila", "text": "Mochila pesada", "detail": "A mochila tem marcas de brilho e poeira da vitrine." }
+    ],
+    "suspects": [
+      { "id": "s1", "name": "Atleta Leo", "desc": "Queria o trofeu na sala do time", "icon": "" },
+      { "id": "s2", "name": "Rita", "desc": "Estudava na biblioteca", "icon": "" }
+    ],
+    "solve": { "culprit": "s1", "reasonText": "A vitrine aberta e o rastro de tenis levam ao atleta, e a mochila confirma." }
+  },
+
+  {
+    "id": "c-007",
+    "title": "A Chave da Biblioteca Perdida",
+    "summary": "A chave mestra da biblioteca sumiu. Onde foi parar?",
+    "thumb": "library_cartoon.png",
+    "scenes": [
+      {
+        "id": "hall",
+        "bg": "school_hallway_cartoon.png",
+        "hotspots": [
+          { "id": "hs-banco", "x": 20, "y": 66, "w": 18, "h": 12, "icon": "🪑", "clueId": "cl-chave", "requiresTalk": "s1" }
+        ]
+      },
+      {
+        "id": "library",
+        "bg": "library_cartoon.png",
+        "hotspots": [
+          { "id": "hs-porta", "x": 48, "y": 40, "w": 18, "h": 20, "icon": "🚪", "clueId": "cl-porta", "requiresItem": "cl-chave" },
+          { "id": "hs-mesa", "x": 60, "y": 52, "w": 14, "h": 14, "icon": "📚", "clueId": "cl-carimbo", "requiresItem": "cl-chave" }
+        ]
+      }
+    ],
+    "clues": [
+      { "id": "cl-chave", "text": "Chave mestra", "detail": "A chave estava embaixo do banco do corredor.", "isItem": true },
+      { "id": "cl-porta", "text": "Porta aberta", "detail": "A chave mestra abre a biblioteca sem forcar." },
+      { "id": "cl-carimbo", "text": "Carimbo na mesa", "detail": "Carimbo da bibliotecaria em devolucao atrasada." }
+    ],
+    "suspects": [
+      { "id": "s1", "name": "Bibliotecaria Dora", "desc": "Perdeu a chave", "icon": "" },
+      { "id": "s2", "name": "Aluno Traquinas", "desc": "Sempre curioso", "icon": "" }
+    ],
+    "solve": { "culprit": "s1", "reasonText": "A chave e o carimbo mostram que a bibliotecaria esqueceu a chave no banco." }
+  },
+
+  {
+    "id": "c-008",
+    "title": "O Livro de Magia Sumiu",
+    "summary": "Um livro de feiticos desapareceu da prateleira.",
+    "thumb": "library_cartoon.png",
+    "scenes": [
+      {
+        "id": "library",
+        "bg": "library_cartoon.png",
+        "hotspots": [
+          { "id": "hs-espaco", "x": 66, "y": 38, "w": 16, "h": 16, "icon": "📖", "clueId": "cl-prateleira" },
+          { "id": "hs-marcador", "x": 66, "y": 52, "w": 14, "h": 14, "icon": "🔖", "clueId": "cl-marcador", "requiresTalk": "s1" }
+        ]
+      },
+      {
+        "id": "music_room",
+        "bg": "music_room_cartoon.png",
+        "hotspots": [
+          { "id": "hs-mochila", "x": 32, "y": 58, "w": 18, "h": 18, "icon": "🎒", "clueId": "cl-livro" }
+        ]
+      }
+    ],
+    "clues": [
+      { "id": "cl-prateleira", "text": "Espaco vazio", "detail": "A prateleira tem marcas de poeira recente." },
+      { "id": "cl-marcador", "text": "Marcador roxo", "detail": "Marcador igual ao do grupo de teatro." },
+      { "id": "cl-livro", "text": "Livro na mochila", "detail": "O livro estava guardado para usar no ensaio." }
+    ],
+    "suspects": [
+      { "id": "s1", "name": "Bibliotecaria Dora", "desc": "Conhece os livros raros", "icon": "" },
+      { "id": "s2", "name": "Artista Nilo", "desc": "Do grupo de teatro", "icon": "" }
+    ],
+    "solve": { "culprit": "s2", "reasonText": "O marcador do teatro e o livro na mochila do artista fecham o caso." }
   }
 ]
