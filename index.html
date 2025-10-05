@@ -1,68 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sherlock Bia — Detetive Mirim (v1.8)</title>
-  <link rel="stylesheet" href="./style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sherlock Bia — v1.8.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<!-- Link para o arquivo CSS externo -->
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <span class="logo">🕵️‍♀️</span>
-      <h1>Sherlock Bia</h1>
-      <span class="tag">Detetive Mirim</span>
-    </div>
-    <div class="hud">
-      <div class="hud-item"><span>⏱️</span> <span id="timer">00:00</span></div>
-      <div class="hud-item"><span>⭐</span> <span id="stars">0</span></div>
-      <div class="hud-item"><span>🪙</span> <span id="coins">0</span></div>
-      <button id="btnInventory" class="btn ghost" title="Inventário">🎒 Inventário</button>
-      <button id="btnHint" class="btn" title="Pedir dica">💡 Dica</button>
-    </div>
-  </header>
+<header>
+  <h1>🕵️‍♀️ Sherlock Bia — v1.8.1</h1>
+  <div class="nav">
+    <button class="btn" data-action="go-welcome">Início</button>
+    <button class="btn" data-action="go-hub">Mapa de Casos</button>
+    <button class="btn" data-action="go-parents">Painel dos Pais</button>
+    <button class="btn" data-action="go-skill-tree">🌟 Habilidades</button> <!-- Novo botão para Habilidades -->
+    <button class="btn ghost" data-action="reset-progress">Zerar Progresso</button>
+  </div>
+</header>
+<main class="container" id="app"><!-- conteúdo renderizado via JS --></main>
+<div id="toast-container" aria-live="polite"></div>
 
-  <main>
-    <section id="caseIntro" class="panel">
-      <h2>Bem-vindo(a)!</h2>
-      <p>Escolha um caso para investigar. Encontre pistas no cenário, interrogue suspeitos e faça a acusação final.</p>
-      <div class="case-list" id="caseList"></div>
-    </section>
+<!-- Custom Modals -->
+<div id="custom-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h3 id="modal-title"></h3>
+    <p id="modal-message"></p>
+    <input type="text" id="modal-input" class="modal-input" style="display: none;">
+    <div id="modal-options" class="modal-actions"></div>
+  </div>
+</div>
 
-    <section id="gameArea" class="panel hidden">
-      <div class="scene-wrap">
-        <div id="scene" class="scene" role="img" aria-label="Cenário do caso"></div>
-        <div id="hotspots" class="hotspots"></div>
-      </div>
-      <aside class="side">
-        <div class="card">
-          <h3>Pistas</h3>
-          <div id="cluesList" class="clues"></div>
-        </div>
-        <div class="card">
-          <h3>Suspeitos</h3>
-          <div id="suspectsList" class="suspects"></div>
-        </div>
-        <div class="card">
-          <h3>Ações</h3>
-          <button id="btnAccuse" class="btn warn">Fazer Acusação</button>
-          <button id="btnBack" class="btn ghost">Voltar</button>
-        </div>
-      </aside>
-    </section>
-  </main>
+<footer>Protótipo com cenários cartoon realistas. Imagens geradas dinamicamente para cada ambiente.</footer>
 
-  <footer class="app-footer">
-    <span>v1.8 • Engine v1.6.1 + Conteúdo SherloBia</span>
-  </footer>
-
-  <div id="modalRoot"></div>
-
-  <!-- Casos embutidos: funciona local e no GitHub Pages -->
-  <script id="cases-json" type="application/json">
-  <!-- (mantive o SEU JSON embutido que já estava aí) -->
-  </script>
-
-  <script src="./script.js"></script>
+<!-- Link para o arquivo JavaScript externo -->
+<script src="script.js"></script>
 </body>
 </html>
