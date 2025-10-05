@@ -1,11 +1,11 @@
-// Sherlock Bia — v1.7 (engine v1.6.1 + cases.json)
-const STORAGE_KEY = "sbia_state_v1_7";
+// Sherlock Bia — v1.8 (engine v1.6.1 + cases embutidos)
+const STORAGE_KEY = "sbia_state_v1_8";
 const S = { coins: 0, stars: 0, sessions: {} };
 let currentCaseId = null;
 let currentTimerIntervalId = null;
 let CASES = [];
 
-const $ = (s,el=document)=>el.querySelector(s);
+const $ = (s, el=document) => el.querySelector(s);
 function fmtTime(sec){ sec=Math.max(0,Math.floor(sec||0)); const m=String(Math.floor(sec/60)).padStart(2,'0'); const s2=String(sec%60).padStart(2,'0'); return `${m}:${s2}`;}
 function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); }
 function load(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(raw) Object.assign(S, JSON.parse(raw)); }catch(e){ console.warn('load fail', e);} }
@@ -34,7 +34,7 @@ function showModal({title, body, actions=[{label:'Fechar', variant:'ghost'}]}={}
   return { close, el: modal, contentEl: modal.querySelector('.content') };
 }
 
-// Preload images to reduce flicker
+// Preload images
 async function preloadImages(list){
   await Promise.all(list.map(src=> new Promise(res=>{ const i=new Image(); i.onload=i.onerror=()=>res(); i.src=src; })));
 }
@@ -44,7 +44,7 @@ const UI = {
   async init(){
     load();
     this.renderHud();
-    await Data.loadCases(); // loads CASES and preloads thumbs/backgrounds
+    await Data.loadCases();    // carrega CASES (embed/fetch) e pre-carrega imagens
     this.renderCaseList();
     this.bindGlobal();
   },
@@ -70,16 +70,36 @@ const UI = {
       if (b.id==='btnInventory'){ Main.openInventory(); }
       if (b.id==='btnHint'){ Main.giveHint(); }
       if (b.id==='btnAccuse'){ Main.accuse(); }
-      if (action==='tap-hotspot'){ const reqItem=b.dataset.requiresItem; if(reqItem){ const sess=S.sessions[b.dataset.caseId]; if(!(sess.items||[]).includes(reqItem)){ const c=CASES.find(x=>x.id===b.dataset.caseId); const ic=(c.clues||[]).find(x=>x.id===reqItem)?.text||'um item'; showModal({title:'Item necessário', body:`Você precisa de <strong>${ic}</strong> para interagir aqui.`}); return; } } Main.collectClue(b.dataset.caseId, b.dataset.clueId); }
+      if (action==='tap-hotspot'){
+        const reqItem=b.dataset.requiresItem;
+        if(reqItem){
+          const sess=S.sessions[b.dataset.caseId];
+          if(!(sess.items||[]).includes(reqItem)){
+            const c=CASES.find(x=>x.id===b.dataset.caseId);
+            const ic=(c.clues||[]).find(x=>x.id===reqItem)?.text||'um item';
+            showModal({title:'Item necessário', body:`Você precisa de <strong>${ic}</strong> para interagir aqui.`});
+            return;
+          }
+        }
+        Main.collectClue(b.dataset.caseId, b.dataset.clueId);
+      }
       if (action==='tap-clue'){ Main.showClueDetail(b.dataset.caseId, b.dataset.clueId); }
       if (action==='talk-suspect'){ Main.talkSuspect(b.dataset.caseId, b.dataset.suspectId); }
+      if (action==='dlg-opt'){
+        const cId=b.dataset.caseId, sId=b.dataset.suspectId, opt=b.dataset.opt;
+        const name=(CASES.find(x=>x.id===cId)?.suspects||[]).find(s=>s.id===sId)?.name||'Suspeito';
+        const msg = opt==='onde'
+          ? `${name}: Eu estava perto do corredor, ouvi passos na direção da biblioteca.`
+          : `${name}: Vi alguém mexendo num armário trancado.`;
+        showModal({title:`${name}`, body:`<p>${msg}</p>`});
+      }
     });
     window.addEventListener('beforeunload', save);
   },
   renderCase(caseId){
     const c = CASES.find(x=>x.id===caseId); if(!c) return;
     $('#caseIntro').classList.add('hidden'); $('#gameArea').classList.remove('hidden');
-    if (!S.sessions[caseId]){ S.sessions[caseId]={caseId, clues:[], suspectsTalked:[], start:Date.now(), timeSpent:0, status:'active'}; save(); }
+    if (!S.sessions[caseId]){ S.sessions[caseId]={caseId, clues:[], items:[], suspectsTalked:[], start:Date.now(), timeSpent:0, status:'active'}; save(); }
     currentCaseId = caseId;
     this.renderScene(caseId, c.scenes[0]);
     this.renderSide(caseId);
@@ -87,17 +107,28 @@ const UI = {
   },
   renderScene(caseId, sceneDef){
     const scene = $('#scene'); const hsWrap = $('#hotspots');
-    scene.classList.add('is-changing'); setTimeout(()=>{ scene.style.backgroundImage = `url('assets/${sceneDef.bg}')`; scene.classList.remove('is-changing'); }, 50);
+    scene.classList.add('is-changing');
+    setTimeout(()=>{ scene.style.backgroundImage = `url('assets/${sceneDef.bg}')`; scene.classList.remove('is-changing'); }, 50);
     hsWrap.innerHTML='';
-    (sceneDef.hotspots||[]).filter(h=>{ const sess=S.sessions[caseId]; if(h.requiresTalk && !(sess.suspectsTalked||[]).includes(h.requiresTalk)) return false; if(h.requiresItem && !(sess.items||[]).includes(h.requiresItem)) return false; return true; }).forEach(h=>{
-      const btn = document.createElement('button');
-      btn.className='hotspot'; btn.dataset.action='tap-hotspot'; btn.dataset.caseId=caseId; btn.dataset.clueId=h.clueId;
-      btn.style.left = h.x+'%'; btn.style.top=h.y+'%'; btn.style.width=h.w+'%'; btn.style.height=h.h+'%';
-      btn.dataset.requiresItem = h.requiresItem||'';
-      btn.dataset.requiresTalk = h.requiresTalk||'';
-      btn.innerHTML = `<span class=\"icon\">${h.icon||'🔎'}</span>`;
-      hsWrap.appendChild(btn);
-    });
+    (sceneDef.hotspots||[])
+      .filter(h=>{
+        const sess=S.sessions[caseId];
+        if(h.requiresTalk && !(sess.suspectsTalked||[]).includes(h.requiresTalk)) return false;
+        if(h.requiresItem && !(sess.items||[]).includes(h.requiresItem)) return false;
+        return true;
+      })
+      .forEach(h=>{
+        const btn = document.createElement('button');
+        btn.className='hotspot';
+        btn.dataset.action='tap-hotspot';
+        btn.dataset.caseId=caseId;
+        btn.dataset.clueId=h.clueId;
+        btn.style.left = h.x+'%'; btn.style.top=h.y+'%'; btn.style.width=h.w+'%'; btn.style.height=h.h+'%';
+        btn.dataset.requiresItem = h.requiresItem||'';
+        btn.dataset.requiresTalk = h.requiresTalk||'';
+        btn.innerHTML = `<span class="icon">${h.icon||'🔎'}</span>`;
+        hsWrap.appendChild(btn);
+      });
   },
   renderSide(caseId){
     const c = CASES.find(x=>x.id===caseId); const sess = S.sessions[caseId];
@@ -105,13 +136,13 @@ const UI = {
       const found = sess.clues.includes(k.id);
       return `<div class="clue">
         <div><strong>${k.text}</strong> ${found?'<span class="status-ok">[coletada]</span>':'<span class="status-pending">[pendente]</span>'}</div>
-        <div><button class="btn ghost" data-action="tap-clue" data-case-id="${caseId}" data-clue-id="${k.id}" ${found?\'\':\'disabled\'}>${found?'Ver':'Ainda não encontrada'}</button></div>
+        <div><button class="btn ghost" data-action="tap-clue" data-case-id="${caseId}" data-clue-id="${k.id}" ${found?'':'disabled'}>${found?'Ver':'Ainda não encontrada'}</button></div>
       </div>`;
     }).join('');
     $('#suspectsList').innerHTML = (c.suspects||[]).map(s=>{
       const talked = (sess.suspectsTalked||[]).includes(s.id);
-      return `<div class="suspect">
-        <strong>${s.name}</strong>
+      return `<div class="suspect ${talked?'talked':''}">
+        <strong>${s.name}</strong> ${talked?'<span class="badge-talked">Entrevistado</span>':'<span class="badge-pending">Pendente</span>'}
         <small>${s.desc||''}</small>
         <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
           <em>${talked?'Já conversou':'Ainda não conversou'}</em>
@@ -122,31 +153,20 @@ const UI = {
   }
 };
 
-
 // --------------- Data ---------------
 const Data = {
   async loadCases(){
-    // Try embedded JSON first (works on file://)
+    // Tenta JSON embutido (file:// funciona)
     const tag = document.getElementById('cases-json');
     if (tag) {
-      try {
-        CASES = JSON.parse(tag.textContent);
-      } catch (e) {
-        console.warn('Falha ao parsear cases embutidos:', e);
-        CASES = [];
-      }
+      try { CASES = JSON.parse(tag.textContent); }
+      catch (e) { console.warn('Falha ao parsear cases embutidos:', e); CASES = []; }
     }
-    // Fallback: fetch (for GitHub Pages / http/https)
+    // Fallback: fetch (GitHub Pages)
     if (!CASES || CASES.length === 0) {
-      try {
-        const res = await fetch('./cases.json');
-        CASES = await res.json();
-      } catch (e) {
-        console.warn('Falha no fetch de cases.json:', e);
-        CASES = [];
-      }
+      try { const res = await fetch('./cases.json'); CASES = await res.json(); }
+      catch (e) { console.warn('Falha no fetch de cases.json:', e); CASES = []; }
     }
-
     const imgs = [];
     CASES.forEach(c=>{
       imgs.push('assets/'+c.thumb);
@@ -154,14 +174,54 @@ const Data = {
       (c.clues||[]).forEach(cl=>{ if (cl.asset) imgs.push('assets/'+cl.asset); });
       (c.suspects||[]).forEach(su=>{ if (su.icon) imgs.push('assets/'+su.icon); });
     });
-    await preloadImages(Array.from(new Set(imgs)));
+    await preloadImages([...new Set(imgs)]);
   }
 };
 
-
 // --------------- Main ---------------
 const Main = {
-  
+  startCase(id){ UI.renderCase(id); },
+  exitCase(){ $('#gameArea').classList.add('hidden'); $('#caseIntro').classList.remove('hidden'); currentCaseId=null; this.stopTimer(); UI.renderHud(); },
+
+  startTimer(caseId){
+    if (currentTimerIntervalId) clearInterval(currentTimerIntervalId);
+    const sess = S.sessions[caseId]; if(!sess || sess.status==='solved') return;
+    currentTimerIntervalId = setInterval(()=>{
+      const s=S.sessions[caseId]; if(!s || s.status==='solved'){ clearInterval(currentTimerIntervalId); currentTimerIntervalId=null; return; }
+      s.timeSpent = Math.floor((Date.now()-s.start)/1000); $('#timer').textContent = fmtTime(s.timeSpent);
+    }, 1000);
+  },
+  stopTimer(){ if(currentTimerIntervalId){ clearInterval(currentTimerIntervalId); currentTimerIntervalId=null; } },
+
+  collectClue(caseId, clueId){
+    const sess=S.sessions[caseId]; const c=CASES.find(x=>x.id===caseId); if(!sess||!c) return;
+    if (!sess.clues.includes(clueId)){
+      sess.clues.push(clueId);
+      const clue=(c.clues||[]).find(k=>k.id===clueId);
+      if (clue?.isItem){ sess.items = sess.items||[]; if(!sess.items.includes(clueId)) sess.items.push(clueId); }
+      S.stars+=1; S.coins+=1; save(); UI.renderSide(caseId); UI.renderHud();
+      toast('Pista coletada! +1⭐ +1🪙');
+    } else {
+      toast('Você já coletou essa pista.');
+    }
+  },
+
+  showClueDetail(caseId, clueId){
+    const c=CASES.find(x=>x.id===caseId); const clue=c?.clues.find(k=>k.id===clueId); if(!clue) return;
+    const img = clue.asset ? `<img src="assets/${clue.asset}" alt="" style="width:100%;border-radius:10px;margin:8px 0;" onerror="this.style.display='none'"/>` : '';
+    showModal({title: clue.text, body:`<p>${clue.detail||''}</p>${img}`});
+  },
+
+  openInventory(){
+    const caseData = CASES.find(x=>x.id===currentCaseId);
+    const sess=S.sessions[currentCaseId]||{};
+    const items = (caseData?.clues||[]).filter(c=>c.isItem && (sess.clues||[]).includes(c.id));
+    const grid = items.map(c=>`<div class='inventory-item'><img src='assets/${c.itemIcon||c.asset||""}' onerror="this.style.display='none'"/><div>${c.text}</div></div>`).join('');
+    const itemsHtml = `<h4>Itens</h4><div class='inventory-grid'>${grid || '<div style=\'opacity:.7\'>Nenhum item.</div>'}</div>`;
+    const body = `<p><strong>Estrelas:</strong> ${S.stars}</p><p><strong>Moedas:</strong> ${S.coins}</p>` + itemsHtml + `<p style='color:#94a3b8'>Alguns locais exigem itens (ex.: chaves). Itens aparecem aqui após coletados.</p>`;
+    showModal({title:'Inventário', body});
+  },
+
   talkSuspect(caseId, suspectId){
     const c = CASES.find(x=>x.id===caseId); const sess = S.sessions[caseId]; if(!c||!sess) return;
     const s = (c.suspects||[]).find(x=>x.id===suspectId); if(!s) return;
@@ -175,62 +235,19 @@ const Main = {
            <button class="btn" data-action="dlg-opt" data-case-id="${caseId}" data-suspect-id="${s.id}" data-opt="algo">Viu algo estranho?</button>
          </div>`;
 
-    const modal = showModal({ title:`Conversa com ${s.name}`, body: content });
+    showModal({ title:`Conversa com ${s.name}`, body: content });
 
-    // Mark as talked
     if (!talked){
       sess.suspectsTalked = (sess.suspectsTalked||[]);
       sess.suspectsTalked.push(suspectId);
       save();
       UI.renderSide(caseId);
-      // Reveal any gated hotspots by re-rendering current scene (use first scene for simplicidade)
-      const sc = c.scenes[0];
-      UI.renderScene(caseId, sc);
+      // Re-render para revelar hotspots travados por conversa
+      UI.renderScene(caseId, c.scenes[0]);
       toast('Entrevista registrada');
-    }
-  },
-0);
-    if (!talked){
-      sess.suspectsTalked = (sess.suspectsTalked||[]);
-      sess.suspectsTalked.push(suspectId);
-      save();
-      UI.renderSide(caseId);
-      toast('Entrevista registrada');
-      // Re-render current scene to reveal any gated hotspots
-      const c=CASES.find(x=>x.id===caseId);
-      if(c){ UI.renderScene(caseId, c.scenes[0]); UI.renderSide(caseId); }
     }
   },
 
-  startCase(id){ UI.renderCase(id); },
-  exitCase(){ $('#gameArea').classList.add('hidden'); $('#caseIntro').classList.remove('hidden'); currentCaseId=null; this.stopTimer(); UI.renderHud(); },
-  startTimer(caseId){
-    if (currentTimerIntervalId) clearInterval(currentTimerIntervalId);
-    const sess = S.sessions[caseId]; if(!sess || sess.status==='solved') return;
-    currentTimerIntervalId = setInterval(()=>{
-      const s=S.sessions[caseId]; if(!s || s.status==='solved'){ clearInterval(currentTimerIntervalId); currentTimerIntervalId=null; return; }
-      s.timeSpent = Math.floor((Date.now()-s.start)/1000); $('#timer').textContent = fmtTime(s.timeSpent);
-    }, 1000);
-  },
-  stopTimer(){ if(currentTimerIntervalId){ clearInterval(currentTimerIntervalId); currentTimerIntervalId=null; } },
-  collectClue(caseId, clueId){
-    const sess=S.sessions[caseId]; const c=CASES.find(x=>x.id===caseId); if(!sess||!c) return;
-    if (!sess.clues.includes(clueId)){ sess.clues.push(clueId); const clue=(CASES.find(x=>x.id===caseId)?.clues||[]).find(c=>c.id===clueId); if(clue?.isItem){ sess.items = sess.items||[]; if(!sess.items.includes(clueId)) sess.items.push(clueId); } S.stars+=1; S.coins+=1; save(); UI.renderSide(caseId); UI.renderHud(); toast('Pista coletada! +1⭐ +1🪙'); }
-    else { toast('Você já coletou essa pista.'); }
-  },
-  showClueDetail(caseId, clueId){
-    const c=CASES.find(x=>x.id===caseId); const clue=c?.clues.find(k=>k.id===clueId); if(!clue) return;
-    const img = clue.asset ? `<img src="assets/${clue.asset}" alt="" style="width:100%;border-radius:10px;margin:8px 0;" onerror="this.style.display='none'"/>` : '';
-    showModal({title: clue.text, body:`<p>${clue.detail||''}</p>${img}`});
-  },
-  openInventory(){ const caseData = CASES.find(x=>x.id===currentCaseId);
-    const sess=S.sessions[currentCaseId]||{};
-    const items = (caseData?.clues||[]).filter(c=>c.isItem && (sess.clues||[]).includes(c.id));
-    const grid = items.map(c=>`<div class='inventory-item'><img src='assets/${c.itemIcon||c.asset||""}' onerror="this.style.display='none'"/><div>${c.text}</div></div>`).join('');
-    const itemsHtml = `<h4>Itens</h4><div class='inventory-grid'>${grid || '<div style=\'opacity:.7\'>Nenhum item.</div>'}</div>`;
-    const body = `<p><strong>Estrelas:</strong> ${S.stars}</p><p><strong>Moedas:</strong> ${S.coins}</p>` + itemsHtml + `<p style='color:#94a3b8'>Alguns locais exigem itens (ex.: chaves). Itens aparecem aqui após coletados.</p>`;
-    showModal({title:'Inventário', body}); },
-  
   async giveHint(){
     if(!currentCaseId){ toast('Abra um caso para pedir uma dica.'); return; }
     const sess=S.sessions[currentCaseId]; const c=CASES.find(x=>x.id===currentCaseId);
@@ -238,23 +255,19 @@ const Main = {
     let hintText='';
     if (useOnline){ try{ hintText = await LLM.generateHint(c, sess); }catch(e){ console.warn('LLM falhou', e);} }
     if(!hintText){
-      // 1) If there is a hotspot gated by conversation, suggest who to talk to
       const allHotspots = (c.scenes||[]).flatMap(s=>s.hotspots||[]);
       const gatedTalk = allHotspots.find(h=> h.requiresTalk && !(sess.suspectsTalked||[]).includes(h.requiresTalk));
       if (gatedTalk){
         const who = (c.suspects||[]).find(su=>su.id===gatedTalk.requiresTalk)?.name || 'um colega';
         hintText = `Converse com ${who} e volte à cena correspondente.`;
       } else {
-        // 2) If there is a hotspot gated by item, suggest the item
         const gatedItem = allHotspots.find(h=> h.requiresItem && !((sess.items||[]).includes(h.requiresItem)));
         if (gatedItem){
           const need = (c.clues||[]).find(cl=>cl.id===gatedItem.requiresItem)?.text || 'um item especial';
           hintText = `Encontre ${need} e use onde houver um cadeado.`;
         } else {
-          // 3) Otherwise, suggest the next uncollected clue with its scene
           const pending = (c.clues||[]).find(cl=> !(sess.clues||[]).includes(cl.id));
           if (pending){
-            // try to find the scene containing its hotspot
             const scene = (c.scenes||[]).find(s=>(s.hotspots||[]).some(h=>h.clueId===pending.id));
             const sceneName = scene ? scene.id : 'alguma cena';
             hintText = `Você ainda não coletou "${pending.text}". Explore a cena: ${sceneName}.`;
@@ -280,19 +293,19 @@ const Main = {
             <span><strong>${s.name}</strong> — <small>${s.desc||''}</small></span>
           </label>`).join('')}
       </div>`;
-    const m = showModal({
+    showModal({
       title:'Acusação', body: body.outerHTML,
       actions:[
         {label:'Cancelar', variant:'ghost'},
-        {label:'Confirmar', onClick:(close)=>{
+        {label:'Confirmar', onClick:()=>{
           const sel = document.querySelector('input[name="culprit"]:checked');
           if(!sel){ showModal({title:'Atenção', body:'Escolha um suspeito antes de confirmar.'}); return; }
           const ok = sel.value === c.solve.culprit;
           if(ok){
-            sess.status='solved'; this.stopTimer(); S.stars+=3; S.coins+=3; save(); UI.renderHud(); close();
+            sess.status='solved'; this.stopTimer(); S.stars+=3; S.coins+=3; save(); UI.renderHud();
             showModal({title:'Caso Resolvido! 🎉', body:`<p>${c.solve.reasonText}</p><p>+3⭐ +3🪙</p>`});
           } else {
-            S.coins=Math.max(0,S.coins-1); save(); UI.renderHud(); close();
+            S.coins=Math.max(0,S.coins-1); save(); UI.renderHud();
             showModal({title:'Ainda não…', body:'A acusação não bate com as evidências. Revise as pistas e tente novamente.'});
           }
         }}
@@ -301,6 +314,7 @@ const Main = {
   }
 };
 
+// Dicas online (opcional)
 const LLM = {
   async generateHint(caseData, session){
     const k = window.GEMINI_API_KEY?.trim(); if(!k) throw new Error('Sem chave');
