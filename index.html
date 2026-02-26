@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sherlock Bia — v2.0</title>
+<title>Sherlock Bia — v2.0 Enhanced</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<!-- Link para o arquivo CSS externo -->
 <link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </head>
 <body>
 <header>
-  <h1 class="logo">🕵️‍♀️ Sherlock Bia — v2.0</h1>
+  <h1>🕵️‍♀️ Sherlock Bia — v2.0 Enhanced</h1>
   <div class="nav">
     <button class="btn" data-action="go-welcome">Início</button>
     <button class="btn" data-action="go-hub">Mapa de Casos</button>
@@ -19,8 +19,10 @@
     <button class="btn ghost" data-action="reset-progress">Zerar Progresso</button>
   </div>
 </header>
-<main class="container" id="app"></main>
+<main class="container" id="app"><!-- conteúdo renderizado via JS --></main>
 <div id="toast-container" aria-live="polite"></div>
+
+<!-- Custom Modals -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-content">
     <h3 id="modal-title"></h3>
@@ -29,7 +31,22 @@
     <div id="modal-options" class="modal-actions"></div>
   </div>
 </div>
-<footer>Sherlock Bia: Desvende mistérios e torne-se um detetive mirim!</footer>
+
+<!-- Truth Revealed Modal for Narrative Feedback -->
+<div id="truth-modal" class="modal-overlay">
+  <div class="modal-content" style="max-width: 600px;">
+    <h3 id="truth-title" style="color: #fbbf24; margin-bottom: 16px;"></h3>
+    <div id="truth-content" style="text-align: left; line-height: 1.8; margin-bottom: 12px; font-size: 1rem;"></div>
+    <div id="truth-evidence" style="background: rgba(125, 211, 252, 0.1); border-left: 4px solid #7dd3fc; padding: 12px; border-radius: 6px; margin: 12px 0; text-align: left; font-size: 0.9rem; display: none;"></div>
+    <button class="btn pri" data-action="close-truth-modal" style="width: 100%; margin-top: 12px;">Continuar Investigando</button>
+  </div>
+</div>
+
+<footer>Sherlock Bia v2.0 — Aprenda a investigar, coletar evidências e tomar decisões baseadas em fatos!</footer>
+
+<!-- Link para o arquivo JavaScript externo -->
 <script src="script.js"></script>
+
 </body>
 </html>
+
